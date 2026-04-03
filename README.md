@@ -7,7 +7,7 @@ Generate ready-to-use MCP servers from OpenAPI specs, databases, or YAML descrip
 ## Install
 
 ```bash
-npx mcpkit
+npx @fanioz/mcpkit
 ```
 
 ## Usage
@@ -15,9 +15,9 @@ npx mcpkit
 ### Create a blank MCP server
 
 ```bash
-npx mcpkit init
+npx @fanioz/mcpkit init
 # or with flags:
-npx mcpkit init --name my-server --description "My custom MCP server"
+npx @fanioz/mcpkit init --name my-server --description "My custom MCP server"
 ```
 
 ### Generate from an OpenAPI spec
@@ -25,15 +25,15 @@ npx mcpkit init --name my-server --description "My custom MCP server"
 Turns every endpoint into an MCP tool. Supports OpenAPI 3.x and Swagger 2.x.
 
 ```bash
-npx mcpkit from openapi.yaml
-npx mcpkit from openapi.yaml --name petstore-mcp
-npx mcpkit from openapi.yaml --name my-api -o ./output-dir
+npx @fanioz/mcpkit from openapi.yaml
+npx @fanioz/mcpkit from openapi.yaml --name petstore-mcp
+npx @fanioz/mcpkit from openapi.yaml --name my-api -o ./output-dir
 ```
 
 **Example — generate from a public API spec:**
 
 ```bash
-npx mcpkit from https://api.example.com/openapi.yaml --name example-mcp
+npx @fanioz/mcpkit from https://api.example.com/openapi.yaml --name example-mcp
 cd example-mcp
 npm install
 npm run dev
@@ -44,8 +44,8 @@ npm run dev
 Creates read-only query tools for every table in your database.
 
 ```bash
-npx mcpkit from sqlite:///path/to/your.db
-npx mcpkit from sqlite:///path/to/your.db --name my-db-mcp
+npx @fanioz/mcpkit from sqlite:///path/to/your.db
+npx @fanioz/mcpkit from sqlite:///path/to/your.db --name my-db-mcp
 ```
 
 ### Generate from a YAML description
@@ -72,7 +72,7 @@ tools:
 ```
 
 ```bash
-npx mcpkit from mcp.yml
+npx @fanioz/mcpkit from mcp.yml
 ```
 
 ## Generated project structure

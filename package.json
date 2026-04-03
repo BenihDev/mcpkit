@@ -1,5 +1,5 @@
 {
-  "name": "mcpkit",
+  "name": "@fanioz/mcpkit",
   "version": "1.0.0",
   "description": "Generate ready-to-use MCP servers from OpenAPI specs, databases, or YAML descriptions",
   "bin": {

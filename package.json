@@ -24,7 +24,15 @@
     "claude",
     "llm"
   ],
-  "author": "fanioz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenihDev/mcpkit.git"
+  },
+  "homepage": "https://github.com/BenihDev/mcpkit#readme",
+  "bugs": {
+    "url": "https://github.com/BenihDev/mcpkit/issues"
+  },
+  "author": "fanioz <fanio.zilla@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",

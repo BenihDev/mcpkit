@@ -1,6 +1,7 @@
 {
   "name": "@fanioz/mcpkit",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "mcpName": "io.github.BenihDev/mcpkit",
   "description": "Generate ready-to-use MCP servers from OpenAPI specs, databases, or YAML descriptions",
   "bin": {
     "mcpkit": "./dist/index.js"

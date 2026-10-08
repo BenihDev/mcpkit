@@ -9,6 +9,18 @@ interface FromOptions {
   readOnly?: boolean;
 }
 
+function zodTypeFor(type: string): string {
+  switch ((type || "string").toLowerCase()) {
+    case "integer":
+    case "number":
+      return "z.number()";
+    case "boolean":
+      return "z.boolean()";
+    default:
+      return "z.string()";
+  }
+}
+
 export async function fromCommand(source: string, options: FromOptions): Promise<void> {
   if (source.startsWith("sqlite://")) {
     await fromSqlite(source, options);
@@ -65,18 +77,19 @@ async function fromOpenApi(
       const paramDecls = t.params
         .map(
           (p) =>
-            `${p.name}: z.string()${p.required ? "" : ".optional()"}${p.description ? `.describe(${JSON.stringify(p.description)})` : ""}`
+            `${p.name}: ${zodTypeFor(p.type)}${p.required ? "" : ".optional()"}${p.description ? `.describe(${JSON.stringify(p.description)})` : ""}`
         )
         .join(", ");
       const paramDestructure =
         t.params.length > 0 ? `{ ${t.params.map((p) => p.name).join(", ")} }` : "_args";
       const urlTemplate = t.url.replace(/{([^}]+)}/g, "${encodeURIComponent($1)}");
+      const queryParams = t.params.filter((p) => p.in === "query" && !t.url.includes(`{${p.name}}`));
       const bodyParams = t.params
-        .filter((p) => !t.url.includes(`{${p.name}}`))
+        .filter((p) => p.in === "body")
         .map((p) => p.name)
         .join(", ");
       const bodyLine =
-        t.method !== "get" && bodyParams
+        ["post", "put", "patch"].includes(t.method) && bodyParams
           ? `\n        body: JSON.stringify({ ${bodyParams} }),`
           : "";
 
@@ -88,7 +101,17 @@ async function fromOpenApi(
         `  { ${paramDecls} },`,
         `  async (${paramDestructure}) => {`,
         `    try {`,
-        `      const url = \`${urlTemplate}\`;`,
+        ...(queryParams.length
+          ? [
+              `      const urlBase = \`${urlTemplate}\`;`,
+              `      const qs = new URLSearchParams();`,
+              ...queryParams.map(
+                (p) => `      if (${p.name} !== undefined) qs.set("${p.name}", String(${p.name}));`
+              ),
+              `      const qsStr = qs.toString();`,
+              `      const url = qsStr ? urlBase + "?" + qsStr : urlBase;`,
+            ]
+          : [`      const url = \`${urlTemplate}\`;`]),
         `      const res = await fetch(url, {`,
         `        method: "${t.method.toUpperCase()}",`,
         `        headers: { "Content-Type": "application/json" },${bodyLine}`,
@@ -149,7 +172,7 @@ server.tool(
   },
   async ({ limit = 100, where }) => {
     const dbPath = path.join(import.meta.dirname || __dirname, "..", "data.db");
-    const Database = require("better-sqlite3");
+    const { default: Database } = await import("better-sqlite3");
     const db = new Database(dbPath, { readonly: true });
     try {
       const sql = where
@@ -171,7 +194,8 @@ server.tool(
   const pkgJson = JSON.parse(
     generateServerFiles(name, `${dbName} MCP Server`, toolDefinitions)["package.json"]
   );
-  pkgJson.dependencies["better-sqlite3"] = "^11.8.1";
+  pkgJson.dependencies["better-sqlite3"] = "^13.0.3";
+  pkgJson.devDependencies["@types/better-sqlite3"] = "^7.6.13";
 
   const files = {
     ...generateServerFiles(name, `${dbName} MCP Server`, toolDefinitions),

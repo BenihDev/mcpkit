@@ -32,7 +32,7 @@ export function parseOpenApi(spec: Record<string, unknown>): {
     description: string;
     method: string;
     url: string;
-    params: Array<{ name: string; type: string; required: boolean; description: string }>;
+    params: Array<{ name: string; type: string; in: string; required: boolean; description: string }>;
   }>;
 } {
   const info = spec.info as Record<string, unknown> | undefined;
@@ -47,7 +47,7 @@ export function parseOpenApi(spec: Record<string, unknown>): {
     description: string;
     method: string;
     url: string;
-    params: Array<{ name: string; type: string; required: boolean; description: string }>;
+    params: Array<{ name: string; type: string; in: string; required: boolean; description: string }>;
   }> = [];
 
   if (paths) {
@@ -59,7 +59,7 @@ export function parseOpenApi(spec: Record<string, unknown>): {
         const name = operationId.replace(/[^a-zA-Z0-9_]/g, "_").toLowerCase();
         const description = (d.summary as string) || (d.description as string) || `${method.toUpperCase()} ${url}`;
 
-        const params: Array<{ name: string; type: string; required: boolean; description: string }> = [];
+        const params: Array<{ name: string; type: string; in: string; required: boolean; description: string }> = [];
 
         // Path params
         const pathParams = d.parameters as Array<Record<string, unknown>> | undefined;
@@ -69,6 +69,7 @@ export function parseOpenApi(spec: Record<string, unknown>): {
               params.push({
                 name: p.name as string,
                 type: (p.schema as Record<string, string>)?.type || "string",
+                in: p.in as string,
                 required: p.required as boolean ?? false,
                 description: (p.description as string) || "",
               });
@@ -93,6 +94,7 @@ export function parseOpenApi(spec: Record<string, unknown>): {
                       params.push({
                         name: propName,
                         type: (propSchema.type as string) || "string",
+                        in: "body",
                         required: required?.includes(propName) ?? false,
                         description: (propSchema.description as string) || "",
                       });

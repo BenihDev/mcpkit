@@ -100,7 +100,7 @@ server.tool(
 );
 ```
 
-Register it in your AI assistant and you can ask "get pet number 42" and it calls your real API.
+Register it in your AI assistant and you can ask "get pet number 42" and it calls your real API. Path parameters are URL-encoded, query parameters are wired into the request URL, and integer/boolean parameters map to the matching zod types.
 
 ### Generate from a SQLite database
 
@@ -185,11 +185,13 @@ Add your generated MCP server to your AI assistant's config:
   "mcpServers": {
     "my-server": {
       "command": "node",
-      "args": ["/path/to/my-mcp-server/src/index.ts"]
+      "args": ["/path/to/my-mcp-server/dist/index.js"]
     }
   }
 }
 ```
+
+Build the project first (`npm run build`); for quick dev, point `args` at `src/index.ts` and run it via `npx tsx`.
 
 **Cursor / Windsurf** — add to your MCP settings.
 

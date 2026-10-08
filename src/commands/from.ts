@@ -70,7 +70,7 @@ async function fromOpenApi(
         .join(", ");
       const paramDestructure =
         t.params.length > 0 ? `{ ${t.params.map((p) => p.name).join(", ")} }` : "_args";
-      const urlTemplate = t.url.replace(/{([^}]+)}/g, "${$1}");
+      const urlTemplate = t.url.replace(/{([^}]+)}/g, "${encodeURIComponent($1)}");
       const bodyParams = t.params
         .filter((p) => !t.url.includes(`{${p.name}}`))
         .map((p) => p.name)

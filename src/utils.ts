@@ -104,7 +104,13 @@ export function parseOpenApi(spec: Record<string, unknown>): {
           }
         }
 
-        tools.push({ name, description, method, url, params });
+        tools.push({
+          name,
+          description,
+          method,
+          url: `${baseUrl.replace(/\/$/, "")}${url}`,
+          params,
+        });
       }
     }
   }

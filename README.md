@@ -57,11 +57,14 @@ paths:
           in: path
           required: true
           schema: { type: string }
+      responses:
+        "200": { description: The requested pet }
   /pets:
     post:
       operationId: createPet
       summary: Add a new pet
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -70,6 +73,8 @@ paths:
               properties:
                 name: { type: string }
                 tag: { type: string }
+      responses:
+        "201": { description: The created pet }
 ```
 
 mcpkit generates a project whose `src/index.ts` contains one MCP tool per endpoint:
@@ -80,7 +85,7 @@ server.tool(
   "Get a pet by ID",
   { petId: z.string() },
   async ({ petId }) => {
-    const url = `https://petstore.example.com/api/pets/${petId}`;
+    const url = `https://petstore.example.com/api/pets/${encodeURIComponent(petId)}`;
     // fetch + return the JSON response as the tool result
   }
 );

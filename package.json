@@ -1,6 +1,6 @@
 {
   "name": "@fanioz/mcpkit",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "mcpName": "io.github.BenihDev/mcpkit",
   "description": "Generate ready-to-use MCP servers from OpenAPI specs, databases, or YAML descriptions",
   "bin": {
@@ -36,10 +36,12 @@
   "author": "fanioz <fanio.zilla@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
-    "better-sqlite3": "^11.8.1",
-    "commander": "^13.1.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "commander": "^14.0.2",
     "js-yaml": "^4.1.0"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^13.0.3"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
@@ -50,6 +52,6 @@
     "typescript": "^5.8.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }

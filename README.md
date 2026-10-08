@@ -39,6 +39,64 @@ npm install
 npm run dev
 ```
 
+**What it does:**
+
+Given `petstore.yaml`:
+
+```yaml
+openapi: 3.0.0
+info: { title: Petstore API, version: "1.0.0" }
+servers: [{ url: https://petstore.example.com/api }]
+paths:
+  /pets/{petId}:
+    get:
+      operationId: getPetById
+      summary: Get a pet by ID
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema: { type: string }
+  /pets:
+    post:
+      operationId: createPet
+      summary: Add a new pet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string }
+                tag: { type: string }
+```
+
+mcpkit generates a project whose `src/index.ts` contains one MCP tool per endpoint:
+
+```ts
+server.tool(
+  "getpetbyid",
+  "Get a pet by ID",
+  { petId: z.string() },
+  async ({ petId }) => {
+    const url = `https://petstore.example.com/api/pets/${petId}`;
+    // fetch + return the JSON response as the tool result
+  }
+);
+
+server.tool(
+  "createpet",
+  "Add a new pet",
+  { name: z.string(), tag: z.string().optional() },
+  async ({ name, tag }) => {
+    // POST with body: JSON.stringify({ name, tag })
+  }
+);
+```
+
+Register it in your AI assistant and you can ask "get pet number 42" and it calls your real API.
+
 ### Generate from a SQLite database
 
 Creates read-only query tools for every table in your database.
@@ -47,6 +105,24 @@ Creates read-only query tools for every table in your database.
 npx @fanioz/mcpkit from sqlite:///path/to/your.db
 npx @fanioz/mcpkit from sqlite:///path/to/your.db --name my-db-mcp
 ```
+
+For every table, the generated server exposes a read-only query tool:
+
+```ts
+server.tool(
+  "list_users",
+  "List rows from the users table",
+  {
+    limit: z.number().optional().describe("Max rows to return (default 100)"),
+    where: z.string().optional().describe("SQL WHERE clause (use with caution)"),
+  },
+  async ({ limit = 100, where }) => {
+    // SELECT * FROM users [WHERE ...] LIMIT ?
+  }
+);
+```
+
+The database is copied into the generated project as `data.db` and opened read-only.
 
 ### Generate from a YAML description
 

@@ -2,6 +2,8 @@
 
 Generate ready-to-use MCP servers from OpenAPI specs, databases, or YAML descriptions.
 
+> **mcpkit is a free, open-source CLI tool by [BenihKode](https://www.benihkode.web.id/tools/mcpkit/)** — a solo developer studio that ships small, focused dev tools. Full docs, examples, and the rest of the toolset live at [benihkode.web.id](https://www.benihkode.web.id/tools/).
+
 > [Model Context Protocol](https://modelcontextprotocol.io/) is the standard for connecting AI assistants to your tools and data. mcpkit gets you from zero to a working MCP server in seconds.
 
 ## Install
@@ -209,6 +211,15 @@ tools:
         required: true     # Optional: default false
 ```
 
+## Links
+
+- **Website & docs:** [benihkode.web.id/tools/mcpkit](https://www.benihkode.web.id/tools/mcpkit/)
+- **All BenihKode tools:** [benihkode.web.id/tools](https://www.benihkode.web.id/tools/)
+
 ## License
 
 MIT
+
+---
+
+Part of the [BenihKode](https://www.benihkode.web.id) developer toolset.
